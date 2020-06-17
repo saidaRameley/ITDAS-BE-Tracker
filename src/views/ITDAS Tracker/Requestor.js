@@ -107,7 +107,7 @@ class requestor extends Component {
                 </Col>
         </Row>
           </CardBody>
-            <CardHeader>GITD ASSESSORS</CardHeader>
+            <CardHeader>GITD NAME ASSESSORS</CardHeader>
               <CardBody>
                 <Row>
                   <Col xs='3'>
