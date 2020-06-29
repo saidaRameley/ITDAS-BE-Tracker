@@ -42,56 +42,73 @@ class requestProfile extends Component {
         <Row>
           <Col xs ='12'>
           <Card>
-            <CardHeader>Request Profile</CardHeader>
+            <CardHeader>REQUEST PROFILE</CardHeader>
             <CardBody>
               <Row>
-                <Col xs='3'>
-                <Label>Reference</Label>
+                <Col xs='2'>
+                <Label>Reference #</Label>
                 <Input type="text" id="reference"name="reference"/>
-                <Label >Category</Label>
-                <Input type="select" name="category" id="categorybe">
-                        <option value="">Please select</option>
-                        <option value="BE">BE</option>
-                        <option value="Non-BE">Non-BE</option>
-                        <option value="MVP">MVP</option>
-                </Input>
-                <Label>Type</Label>
-                <Input type="select" name="type" id="typebe">
-                        <option value="">Please select</option>
-                        <option value="product">Product</option>
-                        <option value="non-product">Non-Product</option>    
-                </Input>
-                <Label>System</Label>
-                <Input type="select" name="system" id="systemid">
-                        <option value="0">Please select</option>
-                        <option value="product">Product</option>
-                        <option value="non-product">Non-Product</option>         
-                </Input>
-                <Label >System/Ref/Project/Initiative Name</Label>
-                <Input type="text" id="projectName"name="projectName"/>
-
+                <Label>Plan PBE No</Label>
+                <Input type="text" id="planpbeno"name="planpbeno"/>
                 <Label >Name/Description</Label>
                 <Input type="textarea" id="descriptionid"name="description"/>
+                <Label >Remarks/Benefit</Label>
+                <Input type="textarea" id="benefitid"name="benefitid"/>
+                <Label >System/Ref/Project/Initiative Name</Label>
+                <Input type="text" id="projectName"name="projectName"/>
                 </Col>
-                <Col xs='3'>
-                <Label>Agile</Label>
+                <Col xs='2'>
+                <Label>Ext Ref #(IRIS No/Proj No)</Label>
                 <Input type="select" name="system" id="system">
                         <option value="">Please select</option>
                         <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                        
+                        <option value="no">No</option>                        
                 </Input>
-                <Label>AOP</Label>
-                <Input type="select" name="aop" id="aop">
+                <Label>Plan PBE Date/RFS Date</Label>
+                <Input type="date" id="planpbedate"name="planpbedate"/>
+                
+                </Col>
+                <Col xs='2'>
+                <Label>Category</Label>
+                <Input type="select" name="select" id="select">
                         <option value="">Please select</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                        
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                        <option value="C3">C3</option>
+                        <option value="C4">C4</option>
                 </Input>
-                <Label>Ana Plan No/Ref. No</Label>
-                <Input type="text" id="planNo"name="planNo"/>
-                <Label>Impacted Systems</Label>
-                <Input type="textarea" id="impactedsystem"name="impactedsystem"/>
+                <Label>Actual PBE No</Label>
+                <Input type="text" id="actualpbeno"name="actualpbeno"/>
+                
+                </Col>
+                <Col xs='2'>
+                <Label>Type</Label>
+                <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="T1">T1</option>
+                        <option value="T2">T2</option>
+                        <option value="T3">T3</option>
+                        <option value="T4">T4</option>
+                </Input>
+                <Label>Actual PBE Date/RFS Date</Label>
+                <Input type="date" id="actualpbedate"name="actualpbedate"/>
+                </Col>
+                <Col xs='2'>
+                <Label>Agile</Label>
+                <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                       
+                </Input>
+                <Label>Quarterly Plan RFS Date</Label>
+                <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="Q1">Q1</option>
+                        <option value="Q2">Q2</option>
+                        <option value="Q3">Q3</option>
+                        <option value="Q4">Q4</option>
+                </Input>
                 <Label>System</Label>
                 <Input type="select" name="systemcategory" id="systemcategory">
                         <option value="">Please select</option>
@@ -105,37 +122,6 @@ class requestProfile extends Component {
                         <option value="Close">Close</option>
                         
                 </Input>
-                </Col>
-                <Col xs='3'>
-                <Label>Plan PBE No</Label>
-                <Input type="text" id="planpbeno"name="planpbeno"/>
-                <Label>Plan PBE Date/RFS Date</Label>
-                <Input type="date" id="planpbedate"name="planpbedate"/>
-                <Label>Quarterly Plan RFS Date</Label>
-                <Input type="select" name="select" id="select">
-                        <option value="">Please select</option>
-                        <option value="Q1">Q1</option>
-                        <option value="Q2">Q2</option>
-                        <option value="Q3">Q3</option>
-                        <option value="Q4">Q4</option>
-                </Input>
-                <Label >Latest Remark/Update</Label>
-                <Input type="textarea" id="latestremark"name="latestremark"/>
-                <Label>Status Description</Label>
-                <Input type="select" name="select" id="select">
-                        <option value="0">Please select</option>
-                        <option value="SIT">SIT</option>
-                        <option value="UAT">UAT</option>
-                        <option value="Regression">Regression</option>
-                        <option value="PT">PT</option>
-                        <option value="Pre Prod">Pre Prod</option>
-                </Input>
-                </Col>
-                <Col xs='3'>
-                <Label>Actual PBE No</Label>
-                <Input type="text" id="actualpbeno"name="actualpbeno"/>
-                <Label>Actual PBE Date</Label>
-                <Input type="date" id="actualpbedate"name="actualpbedate"/>
                 </Col> 
               </Row>
             </CardBody>
