@@ -57,6 +57,7 @@ class requestProfile extends Component {
                 <Label >System/Ref/Project/Initiative Name</Label>
                 <Input type="text" id="projectName"name="projectName"/>
                 </Col>
+
                 <Col xs='2'>
                 <Label>Ext Ref #(IRIS No/Proj No)</Label>
                 <Input type="select" name="system" id="system">
@@ -64,10 +65,11 @@ class requestProfile extends Component {
                         <option value="yes">Yes</option>
                         <option value="no">No</option>                        
                 </Input>
+
                 <Label>Plan PBE Date/RFS Date</Label>
                 <Input type="date" id="planpbedate"name="planpbedate"/>
-                
                 </Col>
+
                 <Col xs='2'>
                 <Label>Category</Label>
                 <Input type="select" name="select" id="select">
@@ -77,10 +79,11 @@ class requestProfile extends Component {
                         <option value="C3">C3</option>
                         <option value="C4">C4</option>
                 </Input>
+
                 <Label>Actual PBE No</Label>
                 <Input type="text" id="actualpbeno"name="actualpbeno"/>
-                
                 </Col>
+
                 <Col xs='2'>
                 <Label>Type</Label>
                 <Input type="select" name="select" id="select">
@@ -90,17 +93,19 @@ class requestProfile extends Component {
                         <option value="T3">T3</option>
                         <option value="T4">T4</option>
                 </Input>
+
                 <Label>Actual PBE Date/RFS Date</Label>
                 <Input type="date" id="actualpbedate"name="actualpbedate"/>
                 </Col>
+
                 <Col xs='2'>
                 <Label>Agile</Label>
                 <Input type="select" name="select" id="select">
                         <option value="">Please select</option>
                         <option value="No">No</option>
-                        <option value="Yes">Yes</option>
-                       
+                        <option value="Yes">Yes</option>     
                 </Input>
+
                 <Label>Quarterly Plan RFS Date</Label>
                 <Input type="select" name="select" id="select">
                         <option value="">Please select</option>
@@ -109,6 +114,7 @@ class requestProfile extends Component {
                         <option value="Q3">Q3</option>
                         <option value="Q4">Q4</option>
                 </Input>
+
                 <Label>System</Label>
                 <Input type="select" name="systemcategory" id="systemcategory">
                         <option value="">Please select</option>
@@ -119,10 +125,18 @@ class requestProfile extends Component {
                         <option value="In Progress">In Progress</option>
                         <option value="KIV">KIV</option>
                         <option value="Cancel">Cancel</option>
-                        <option value="Close">Close</option>
-                        
+                        <option value="Close">Close</option>                
                 </Input>
                 </Col> 
+
+                <Col xs='2'>
+                <Label>AOP</Label>
+                <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                </Input>
+                </Col>
               </Row>
             </CardBody>
           </Card>
