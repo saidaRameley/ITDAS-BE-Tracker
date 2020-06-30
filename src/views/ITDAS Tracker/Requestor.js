@@ -73,23 +73,49 @@ class requestor extends Component {
                 <Label>Email Address</Label>
                 <Input type="text" id="emailaddress"name="emailaddress"/>
                 </Col>
-                <Col xs='3'>
-                <Label>LOB</Label>
-                <Input type="select" name="select" id="select">
-                        <option value="">Please select</option>
-                        <option value="TMW">TMW</option>
-                        <option value="TM ONE">TM ONE</option>
-                        <option value="GITD">GITD</option>
-                        <option value="RRM">RRM</option>
-                        <option value="SFC">SFC</option>
-                        <option value="DCX">DCX</option>
-                        <option value="CXT">CXT</option>
-                        <option value="GNT">GNT</option>
-                        <option value="CF">CF</option>
-                </Input>
-                </Col>
+                <Col xs='1' style={{marginLeft: '30px', marginTop: '25px'}}>
+                                <Button block color="primary"> Add</Button>
+                            </Col>
                    </Row>
                     </CardBody>
+
+<CardBody>
+  <Row>
+    <Col xs='10'>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Requestor Name</th>
+      <th scope="col">LOB</th>
+      <th scope="col">Email ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</Col>
+</Row>
+  </CardBody>
+            
             <CardHeader>CONSULTANTS</CardHeader>
               <CardBody>
                 <Row>
