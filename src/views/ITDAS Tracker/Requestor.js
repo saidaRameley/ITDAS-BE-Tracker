@@ -45,13 +45,33 @@ class requestor extends Component {
             <CardHeader>REQUESTOR</CardHeader>
               <CardBody>
                 <Row>
+                <Col xs='2'>
+                <Label>LOB</Label>
+                <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="TMW">TMW</option>
+                        <option value="TM ONE">TM ONE</option>
+                        <option value="GITD">GITD</option>
+                        <option value="RRM">RRM</option>
+                        <option value="SFC">SFC</option>
+                        <option value="DCX">DCX</option>
+                        <option value="CXT">CXT</option>
+                        <option value="GNT">GNT</option>
+                        <option value="CF">CF</option>
+                </Input>
+                </Col>
                   <Col xs='3'>
                   <Label>Requestor Name</Label>
-                  <Input type="text" id="requestorname"name="requestorname"/>
+                  <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="Name1">Name1</option>
+                        <option value="Name2">Name2</option>
+                        <option value="Name3">Name3</option>
+                </Input>
                   </Col>
                   <Col xs='3'>
-                <Label>Requestor Email</Label>
-                <Input type="text" id="requestoremail"name="requestoremail"/>
+                <Label>Email Address</Label>
+                <Input type="text" id="emailaddress"name="emailaddress"/>
                 </Col>
                 <Col xs='3'>
                 <Label>LOB</Label>
