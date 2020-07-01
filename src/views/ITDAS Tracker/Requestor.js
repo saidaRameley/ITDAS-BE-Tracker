@@ -42,7 +42,10 @@ class requestor extends Component {
         <Row>
           <Col xs ='12'>
           <Card >
-            <CardHeader>REQUESTOR</CardHeader>
+            <CardHeader>
+            <strong>REQUESTOR</strong>
+                    {/* <small> Form</small> */}
+            </CardHeader>
               <CardBody>
                 <Row>
                 <Col xs='2'>
@@ -117,7 +120,10 @@ class requestor extends Component {
  </CardBody>     
 
           <Card>
-            <CardHeader>CONSULTANTS</CardHeader>
+            <CardHeader>
+            <strong>CONSULTANTS</strong>
+                    {/* <small> Form</small> */}
+            </CardHeader>
             </Card>
               <CardBody>
                 <Row>
@@ -145,8 +151,9 @@ class requestor extends Component {
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
+
                 <Col xs='2'>
-                <Label>Consultant 3</Label>
+                <Label>Consultants 3</Label>
                 <Input type="select" name="consultant1" id="consultant1">
                    <option value="">Please select</option>
                    <option value="yes">Yes</option>
@@ -161,7 +168,10 @@ class requestor extends Component {
             </CardBody>
 
            <Card>
-            <CardHeader>GIT ASSESSORS</CardHeader>
+            <CardHeader>
+            <strong>GIT ASSESSORS</strong>
+                    {/* <small> Form</small> */}
+            </CardHeader>
             </Card>
               <CardBody>
                 <Row>

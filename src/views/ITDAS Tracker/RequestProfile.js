@@ -42,7 +42,10 @@ class requestProfile extends Component {
         <Row>
           <Col xs ='12'>
           <Card>
-            <CardHeader>REQUEST PROFILE</CardHeader>
+            <CardHeader>
+            <strong>REQUEST PROFILE</strong>
+                    {/* <small> Form</small> */}
+            </CardHeader>
             <CardBody>
               <Row>
                 <Col xs='3'>
