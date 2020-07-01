@@ -140,6 +140,55 @@ class requestProfile extends Component {
                 </Col> 
               </Row>
             </CardBody>
+        
+                <Col xs='2' style={{marginLeft: '1100px', marginTop: '25px'}}>
+                                <Button block color="primary"> Add Remark</Button>
+                </Col>
+  <Col xs='2'><Label>Latest Remark/Update</Label></Col>
+  <Col xs='12'>
+    <table class="table table-bordered table-striped table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Update By</th>
+      <th scope="col">Type</th>
+      <th scope="col">Status Date</th>
+      <th scope="col">Update Date</th>
+      <th scope="col">Remarks</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</Col>
           </Card>
           </Col>
         </Row>
