@@ -81,6 +81,7 @@ class AddRemarksList extends Component {
                 </CardBody>
               </Row>            
             </CardBody>
+  
       <Col xs='12'>
     <table class="table table-bordered table-striped table table-sm">
   <thead>
