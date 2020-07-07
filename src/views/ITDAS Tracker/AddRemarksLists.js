@@ -46,15 +46,6 @@ class AddRemarksList extends Component {
             <CardBody>
               <Row style={{marginLeft: '250px'}}>
               <Col xs='4'>
-              <FormGroup>
-                <Label >DC Site</Label>
-                <Input type="select" name="select" id="select">
-                        <option value="0">Please select</option>
-                        <option value="1">Option #1</option>
-                        <option value="2">Option #2</option>
-                        <option value="3">Option #3</option>
-                </Input>
-                </FormGroup>
               </Col>
               </Row>
               <Card>
