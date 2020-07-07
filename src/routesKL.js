@@ -52,6 +52,7 @@ const TaskList = React.lazy(() => import('./views/TaskList/taskList'));
 const PendingApproval = React.lazy(() => import('./views/TaskList/pendingApproval'));
 const myTask = React.lazy(() => import('./views/TaskList/myTask'));
 const RequestProfile = React.lazy(() => import('./views/ITDAS Tracker/RequestProfile'));
+const RequestProfileList = React.lazy(() => import('./views/ITDAS Tracker/RequestProfileList'));
 const Requestor = React.lazy(() => import('./views/ITDAS Tracker/Requestor'));
 const AddRemarksList = React.lazy(() => import('./views/ITDAS Tracker/AddRemarksLists'));
 
@@ -77,6 +78,7 @@ const routes = [
   { path: '/pendingApproval', name: 'Waiting Approval', component: PendingApproval },
   { path: '/myTask', name: 'My Task', component: myTask },
   { path: '/RequestProfile', name: 'Request Profile', component: RequestProfile },
+  { path: '/RequestProfileList', name: 'Request Profile', component: RequestProfileList },
   { path: '/Requestor', name: 'Requestor', component: Requestor },
   { path: '/AddRemarksList', name: 'Requestor', component: AddRemarksList },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },

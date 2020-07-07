@@ -61,6 +61,11 @@ export default {
           url: '/RequestProfile',
           icon: 'icon-layers',
         },
+        {
+          name: 'Request Profile List',
+          url: '/RequestProfileList',
+          icon: 'icon-layers',
+        },
       {
         name: 'Requestor',
         url: '/Requestor',
