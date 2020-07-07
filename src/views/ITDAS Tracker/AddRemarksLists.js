@@ -25,7 +25,7 @@ import {
   Row,
 } from 'reactstrap';
 
-class NetworkBandwidth extends Component {
+class AddRemarksList extends Component {
   constructor(props) {
     super(props);
 
@@ -42,7 +42,7 @@ class NetworkBandwidth extends Component {
         <Row>
           <Col xs ='12'>
           <Card>
-            <CardHeader>Network Bandwith</CardHeader>
+            <CardHeader>Add Remarks</CardHeader>
             <CardBody>
               <Row style={{marginLeft: '250px'}}>
               <Col xs='4'>
@@ -99,4 +99,4 @@ class NetworkBandwidth extends Component {
   }
 }
 
-export default NetworkBandwidth;
+export default AddRemarksList;

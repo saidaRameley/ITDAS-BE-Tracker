@@ -66,6 +66,11 @@ export default {
         url: '/Requestor',
         icon: 'icon-layers',
       },
+      {
+        name: 'Add Remarks List',
+        url: '/AddRemarksList',
+        icon: 'icon-layers',
+      },
       ]
     },
   //   {
