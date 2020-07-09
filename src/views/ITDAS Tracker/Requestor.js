@@ -85,7 +85,7 @@ class requestor extends Component {
 <CardBody>
   <Row>
     <Col xs='10'>
-    <table class="table table-bordered table-striped table table-sm">
+    <table className="table table-bordered table-striped table table-sm">
   <thead>
     <tr>
       <th scope="col">No</th>
