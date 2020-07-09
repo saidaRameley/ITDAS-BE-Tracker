@@ -149,7 +149,7 @@ class requestProfile extends Component {
                 </Col>
   <Col xs='2'><Label>Latest Remark/Update</Label></Col>
   <Col xs='12'>
-    <table class="table table-bordered table-striped table table-sm">
+    <table className="table table-bordered table-striped table table-sm">
   <thead>
     <tr>
       <th scope="col">No</th>
