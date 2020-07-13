@@ -24,20 +24,139 @@ import {
   Label,
   Row,
 } from 'reactstrap';
-import {Link} from 'react-router' ;
+import {Link} from 'react-router-dom' ;
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 class requestProfile extends Component {
   constructor(props) {
     super(props);
-
+    this.handleChangeSite= this.handleChangeSite.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeValue = this.handleChangeValue.bind(this);
     this.state = {
-      collapse: true,
-      fadeIn: true,
-      timeout: 300
+      SiteOption: {},
+      selectedSite: "",
+      dcLocation: {},
+      lovSite: "",
+      selectLoc: "",
+      pduRefID: "",
+      pduStatus: "",
+      pduName: "",
+      pduCode: "",
+      pduFuse: "",
+      pduUser: "",
+      pduDesc: "",
     };
   }
 
+  componentDidMount(){
+    this.LOVsite();
+
+  }
+
+  LOVsite(){
+
+    fetch('/claritybqm/reportFetch/?scriptName=DC_SITE')
+    .then(response => response.json())
+    .then((site) => 
+    {  
+        this.setState({ SiteOption : site})  
+        // site.map((d)=>{
+        //     this.setState({ SiteOption : d.SITE_NAME})  
+        //     console.log(d.SITE_NAME);
+            
+        // })
+                  
+    }
+    );
+
+  }
+  handleChangeSite(e){
+      
+    this.setState({
+        selectedSite: e.target.value
+    }) 
+    
+    var siteSelected = e.target.value
+    if(siteSelected != ""){
+        
+        fetch('/claritybqm/reportFetch/?scriptName=DC_LOCATION&site='+siteSelected)
+        .then(response => response.json())
+        .then((loc) => 
+        {
+            
+            this.setState({ dcLocation : loc})          
+           
+        }
+        );
+
+    }
+
+  }
+  handleChangeValue(e){
+
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  handleSubmit(e){
+    e.preventDefault();
+    const values = this.state;
+    //console.log(this.state);
+    let newDate = new Date()
+    let date = newDate.getDate();
+    let month = newDate.getMonth() + 1;
+    let year = newDate.getFullYear();
+
+         
+    fetch('/claritybqm/reportFetch/?scriptName=DC_CREATE_PDU&PDU_NAME='+values.pduName+'&PDU_SITE_ID='+'345435'+'&PDU_LOCN_ID='+
+    '3454345'+'&PDU_CODE='+values.pduCode+'&PDU_FUSE='+values.pduFuse+'&PDU_USER_RACK='+values.pduUser+'&PDU_STATUS='+values.pduStatus+'&PDU_DESC='+values.pduDesc,{
+        method: 'post',
+    })
+    .then(response => response.json())
+    .then((save) => {
+        console.log(save)
+        if(save.length){
+            Swal.fire({
+                icon: 'success',
+                //title: 'Oops...',
+                text: 'Data has been saved.',
+              })
+        }else{
+            Swal.fire({
+                icon: 'error',
+                //title: 'Oops...',
+                text: save.Failed,
+              })
+        }
+    
+    } )
+
+    // axios({
+    //     method: 'post',
+    //     url: '/claritybqm/reportFetch/?scriptName=DC_CREATE_PDU',
+    //     data: {
+    //        // PDU_ID: values.pduRefID,
+    //         PDU_NAME: values.pduName,
+    //         PDU_SITE_ID: '345435',
+    //         PDU_LOCN_ID: '3454345',
+    //         PDU_CODE: values.pduCode,
+    //         PDU_FUSE: values.pduFuse,
+    //         PDU_USER_RACK: values.pduUser,
+    //         PDU_STATUS: values.pduStatus,
+    //         PDU_DESC: values.pduDesc,
+    //        // PDU_CREATED_DT: '',
+    //        // PDU_CREATED_BY: '',
+    //       //  PDU_CLOSED_DT: '',
+    //        // PDU_CLOSED_BY: '',
+            
+    //     }
+    //   });
+    
+     
+  }
   render() {
+
     return (
       <div className="animated fadeIn">
         <Row>
@@ -146,7 +265,7 @@ class requestProfile extends Component {
             </CardBody>
         
             <Col xs='2' style={{marginLeft: '1100px', marginTop: '25px'}}>
-                                <Button block color="primary"> Add Remark</Button>
+                               <Link to={'/editLocation'}><Button block color="primary"> Add Remark</Button></Link> 
                 </Col>
 
   <Col xs='2'><Label>Latest Remark/Update</Label></Col>

@@ -24,6 +24,7 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import {Link} from 'react-router-dom' ;
 
 class requestProfile extends Component {
   constructor(props) {
@@ -144,9 +145,10 @@ class requestProfile extends Component {
               </Row>
             </CardBody>
         
-                <Col xs='2' style={{marginLeft: '1100px', marginTop: '25px'}}>
-                                <Button block color="primary"> Add Remark</Button>
+            <Col xs='2' style={{marginLeft: '1100px', marginTop: '25px'}}>
+                               <Link to={'/editLocation'}><Button block color="primary"> Add Remark</Button></Link> 
                 </Col>
+
   <Col xs='2'><Label>Latest Remark/Update</Label></Col>
   <Col xs='12'>
     <table className="table table-bordered table-striped table table-sm">
