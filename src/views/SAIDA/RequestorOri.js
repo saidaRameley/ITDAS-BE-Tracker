@@ -42,7 +42,10 @@ class requestor extends Component {
         <Row>
           <Col xs ='12'>
           <Card >
-            <CardHeader>REQUESTOR</CardHeader>
+            <CardHeader>
+            <strong>REQUESTOR</strong>
+                    {/* <small> Form</small> */}
+            </CardHeader>
               <CardBody>
                 <Row>
                 <Col xs='2'>
@@ -78,11 +81,11 @@ class requestor extends Component {
                             </Col>
                    </Row>
                     </CardBody>
-
+                   
 <CardBody>
   <Row>
     <Col xs='10'>
-  <table class="table table-bordered">
+    <table className="table table-bordered table-striped table table-sm">
   <thead>
     <tr>
       <th scope="col">No</th>
@@ -114,32 +117,19 @@ class requestor extends Component {
 </table>
 </Col>
 </Row>
-  </CardBody>
-            
-            <CardHeader>CONSULTANTS</CardHeader>
+ </CardBody>     
+
+          <Card>
+            <CardHeader>
+            <strong>CONSULTANTS</strong>
+                    {/* <small> Form</small> */}
+            </CardHeader>
+            </Card>
               <CardBody>
                 <Row>
-                  <Col xs='3'>
-                  <Label>Assignment Group</Label>
-                  <Input type="select" name="assignmentgroup" id="assignmentgroup">
-                   <option value="">Please select</option>
-                   <option value="TM ONE">TM ONE</option>
-                   <option value="UNIFI/CX">UNIFI/CX</option>
-                   <option value="NT">NT</option>
-                   <option value="CENTRAL FUNCTION">CENTRAL FUNCTION</option>
-                   <option value="TMW/RRM">TMW/RRM</option>
-                   <option value="BPM">BPM</option>
-                  </Input>
-                  </Col>
-                  <Col xs='3'>
+                  <Col xs='2'>
                 <Label>Consultant 1</Label>
                 <Input type="select" name="consultant1" id="consultant1">
-                   <option value="">Please select</option>
-                   <option value="yes">Yes</option>
-                   <option value="no">No</option>         
-                </Input>
-                <Label>Consultant 2</Label>
-                <Input type="select" name="consultant2" id="consultant2">
                    <option value="">Please select</option>
                    <option value="yes">Yes</option>
                    <option value="no">No</option>         
@@ -148,11 +138,9 @@ class requestor extends Component {
                 <Col xs='1'>
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
-                <Label>Tag Cost</Label>
-                <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
-                <Col xs='3'>
-                <Label>Consultants 3</Label>
+                <Col xs='2'>
+                <Label>Consultants 2</Label>
                 <Input type="select" name="consultant3" id="consultant3">
                    <option value="">Please select</option>
                    <option value="yes">Yes</option>
@@ -163,31 +151,104 @@ class requestor extends Component {
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
-        </Row>
-          </CardBody>
-            <CardHeader>GITD NAME ASSESSORS</CardHeader>
-              <CardBody>
-                <Row>
-                  <Col xs='3'>
-                  <Label>GITD Names</Label>
-                  <Input type="text" id="gitdnames"name="gitdnames"/>
-                  <Label>GITD Names</Label>
-                <Input type="text" id="gitdnames"name="gitdnames"/>
-                  </Col>
-                  <Col xs='3'>
-                <Label>GITD Teams</Label>
-                <Input type="text" id="gitdteams"name="gitdteams"/>
-                <Label>GITD Teams</Label>
-                <Input type="text" id="gitdteams"name="gitdteams"/>
+
+                <Col xs='2'>
+                <Label>Consultants 3</Label>
+                <Input type="select" name="consultant1" id="consultant1">
+                   <option value="">Please select</option>
+                   <option value="yes">Yes</option>
+                   <option value="no">No</option>         
+                </Input>
                 </Col>
                 <Col xs='1'>
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
+                </Col>
+              </Row>
+            </CardBody>
+
+           <Card>
+            <CardHeader>
+            <strong>GIT ASSESSORS</strong>
+                    {/* <small> Form</small> */}
+            </CardHeader>
+            </Card>
+              <CardBody>
+                <Row>
+                  <Col xs='3'>
+                  <Label>GIT Names</Label>
+                  <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="Name1">Name1</option>
+                        <option value="Name2">Name2</option>
+                        <option value="Name3">Name3</option>
+                </Input>
+                  </Col>
+                  <Col xs='3'>
+                <Label>System</Label>
+                <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="Build">Build</option>
+                        <option value="Testing">Testing</option>
+                        <option value="Deployed">Deployed</option>
+                        <option value="Build">Build</option>
+                        <option value="Completed">Completed</option>
+                        <option value="In Progress">Inprogress</option>
+                        <option value="KIV">kiv</option>
+                        <option value="Cancel">cancel</option>
+                        <option value="Close">close</option>
+                </Input>
+                </Col>
+                <Col xs='1'>
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
+                <Col xs='1' style={{marginLeft: '30px', marginTop: '25px'}}>
+                                <Button block color="primary"> Add</Button>
+                            </Col>
                   </Row>
                 </CardBody>
+
+                <CardBody>
+  <Row>
+    <Col xs='10'>
+    <table class="table table-bordered table-striped table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Name</th>
+      <th scope="col">System</th>
+      <th scope="col">Email ID</th>
+      <th scope="col">Tag Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</Col>
+</Row>
+ </CardBody>
               </Card>
           </Col>
         </Row>
