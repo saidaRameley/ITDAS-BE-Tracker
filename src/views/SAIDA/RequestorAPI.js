@@ -24,6 +24,7 @@ import {
   Label,
   Row,
 } from 'reactstrap';
+import { response } from 'express';
 
 class requestor extends Component {
   constructor(props) {
@@ -35,14 +36,12 @@ class requestor extends Component {
       timeout: 300
     };
   }
-
   componentDidMount(){
-    fetch("/claritybqm/reportFetch/?scriptName=ITDAS_REQUEST_LIST")
+    fetch("/claritybqm/reportFetch/?scriptName-ITDAS_REQUEST_LIST")
     .then(response => response.json())
     .then(data => console.log('req list:', data))
 
   }
-
   render() {
     return (
       <div className="animated fadeIn">
