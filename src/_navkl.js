@@ -67,7 +67,7 @@ export default {
           icon: 'icon-layers',
         },
       {
-        name: 'Requestor/Consultants/GIT Accessors',
+        name: 'Req/Consl/GIT Acc',
         url: '/Requestor',
         icon: 'icon-layers',
       },
