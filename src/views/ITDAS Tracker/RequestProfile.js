@@ -269,6 +269,8 @@ class requestProfile extends Component {
                 </Col>
 
   <Col xs='2'><Label>Latest Remark/Update</Label></Col>
+  <Col xs='2'><Button> Add Remarks </Button>
+                </Col>
   <Col xs='12'>
     <table className="table table-bordered table-striped table table-sm">
   <thead>
