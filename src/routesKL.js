@@ -51,7 +51,7 @@ const ResourceDetails = React.lazy(() => import('./views/Resource Checking/Resou
 const TaskList = React.lazy(() => import('./views/TaskList/taskList'));
 const PendingApproval = React.lazy(() => import('./views/TaskList/pendingApproval'));
 const myTask = React.lazy(() => import('./views/TaskList/myTask'));
-const RequestProfile = React.lazy(() => import('./views/ITDAS Tracker/APIRequestProfile'));
+const RequestProfile = React.lazy(() => import('./views/ITDAS Tracker/RequestProfile'));
 const RequestProfileList = React.lazy(() => import('./views/ITDAS Tracker/RequestProfileList'));
 const Requestor = React.lazy(() => import('./views/ITDAS Tracker/Requestor'));
 const AddRemarksList = React.lazy(() => import('./views/ITDAS Tracker/AddRemarksLists'));
