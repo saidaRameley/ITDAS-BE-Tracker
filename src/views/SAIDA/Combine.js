@@ -1,17 +1,13 @@
 import React, {Component} from 'react';
-import { Badge, Form, Table, FormText, Button,Input, Label, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row,Modal, ModalBody, ModalFooter, ModalHeader,  } from 'reactstrap';
-import $ from 'jquery';
-import axios from 'axios';
+import { Badge, Table, FormText, Button,Input, Label, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row } from 'reactstrap';
+import {connect} from 'react-redux';
 
 class CreateBE extends Component {
 
     constructor(props) {
         super(props);
         this.toggleAccordion = this.toggleAccordion.bind(this);
-        this.lovCatType = this.lovCatType.bind(this);    
-        this.togglePrimary = this.togglePrimary.bind(this);
-        this.handleSubmitRemark = this.handleSubmitRemark.bind(this);
-        this.handleChangeRemark = this.handleChangeRemark.bind(this);
+        this.lovCatType = this.lovCatType.bind(this);
         // Don't call this.setState() here!
         this.state = {
             data: [],
@@ -23,11 +19,6 @@ class CreateBE extends Component {
             LovStatus: {},
             LovStatusDesc: {},
             LovLOB: {},
-            LovConsultant : {},
-            LovGIT : {},
-            LovRequestor : {},
-            primary: false,
-            dataRequest: {},
         };
 
     }
@@ -41,10 +32,6 @@ class CreateBE extends Component {
        this.lovStatus();
        this.lovStatusDesc();
        this.lovLOB();
-       this.LovConsultant();
-       this.LovGIT();
-       this.LovRequestor();
-       this.getReqList();
        }
        
        lovCategory(){
@@ -109,44 +96,6 @@ class CreateBE extends Component {
          })
        }
 
-       LovRequestor(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=LOB&value=UNIFI")
-        .then(response =>  response.json())
-        .then(result =>  {
-          this.setState({ LovRequestor : result.data })
-         }
-         )
-      }
-
-       LovConsultant(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=CONSULTANT")
-        .then(response =>  response.json())
-        .then(result =>  {
-          this.setState({ LovConsultant : result.data })
-         }
-         )
-      }
-
-      LovGIT(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=GIT")
-        .then(response =>  response.json())
-        .then(result =>  {
-          this.setState({ LovGIT : result.data })
-         }
-         )
-      }
-
-      getReqList(){
-
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_REQUEST_LIST")
-        .then(response =>  response.json())
-        .then(result =>  {
-          this.setState({ dataRequest : result.req_update })
-         }
-         )   
-
-      }
-
     toggleAccordion(tab) {
 
         const prevState = this.state.accordion;
@@ -157,73 +106,14 @@ class CreateBE extends Component {
         });
       }
     
-      togglePrimary() {
-        this.setState({
-          primary: !this.state.primary,
-        });
-      }
-
-handleChangeRemark(e){
-
-    e.preventDefault();
-    var $inputs = $('#addRemark :input');//get form values
-    var values = {};
-
-    $inputs.each(function () {
-        if ($(this).is(':radio') == true || $(this).is(':checkbox') == true){
-          values[this.name] = $('input[name=' + $(this).attr('name') + ']:checked').val() == undefined ? "" : $('input[name=' + $(this).attr('name') + ']:checked').val();
-              } 
-              else {
-          values[this.name] = $(this).val() == undefined ? "" : $(this).val();
-        }
-     });
-
-   // console.log('handleChangeRemark', values);
-}
-
-handleSubmitRemark(e){
-
-    e.preventDefault();
-    var $inputs = $('#addRemark :input');//get form values
-    var values = {};
-
-    $inputs.each(function () {
-        if ($(this).is(':radio') == true || $(this).is(':checkbox') == true){
-          values[this.name] = $('input[name=' + $(this).attr('name') + ']:checked').val() == undefined ? "" : $('input[name=' + $(this).attr('name') + ']:checked').val();
-              } 
-              else {
-          values[this.name] = $(this).val() == undefined ? "" : $(this).val();
-        }
-        values['REQ_ID'] = '88';
-        values['RU_ID'] = '';
-        values['RU_UPDATED_BY'] = 'TMXXXXX';
-     });
-
-     //console.log('addremark', values);
-     axios.post('/claritybqm/reportFetchJ/?scriptName=ITD_REQ_STAT_UPD_CREATE', values,
-     ).then((res) => {
-       console.log('success to create ', res);   
-       this.getReqList();
-       this.togglePrimary()
-     })
-     .catch((err) => {
-       console.log('failed to create ', err);
-     });
-
-
-}
     render() {
-       // console.log('dataRequest:', this.state.dataRequest);
         var category = this.state.Lovcategory
-        var type = this.state.LovCatType
+        // var type = this.state.LovCatType
         var system = this.state.LovSystem
         var pillar = this.state.LovPillar
         var status = this.state.LovStatus
         var statusdesc = this.state.LovStatusDesc
         var lob = this.state.LovLOB
-        var requestor = this.state.LovRequestor
-        var consultant = this.state.LovConsultant
-        var git = this.state.LovGIT
         return (
             <div>
 
@@ -285,7 +175,7 @@ handleSubmitRemark(e){
                             //console.log('data', d.LOV_VALUE)
                             return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
                           })
-                        }  
+                        }
                 </Input>
                 <Label>Agile</Label>
                 <Input type="select" name="agile" id="agile">
@@ -328,14 +218,15 @@ handleSubmitRemark(e){
                 <Label >Remarks/Benefit</Label>
                 <Input type="textarea" id="latestremark"name="latestremark"/>
                 <Label>System</Label>
-                <Input type="select" name="systemcategory" id="systemcategory">
-                        <option value="">Please select</option>
+                <Input type="select" name="system" id="systemid">
+                        {/* <option value="product">Product</option>
+                        <option value="non-product">Non-Product</option>          */}
                         {
-                  Object.values(system).map((d)=>{
-                   //console.log('data', d.LOV_VALUE)
-                   return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                 })
-                }
+                           Object.values(system).map((d)=>{
+                            //console.log('data', d.LOV_VALUE)
+                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+                          })
+                        }
                 </Input>
                 </Col>
                 <Col xs='3'>
@@ -343,18 +234,28 @@ handleSubmitRemark(e){
                 <Input type="text" id="initiativename"name="initiativename"/>
                 <Label>Status</Label>
                 <Input type="select" name="status" id="status">
-                <option value="">Please select</option>
-                        {
-                  Object.values(status).map((d)=>{
-                   //console.log('data', d.LOV_VALUE)
-                   return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                 })
-                }
+                       {/* <option value="0">Please select</option>
+                        <option value="SIT">SIT</option>
+                        <option value="UAT">UAT</option>
+                        <option value="Regression">Regression</option>
+                        <option value="PT">PT</option>
+                      <option value="Pre Prod">Pre Prod</option>*/}
+                      {
+                           Object.values(status).map((d)=>{
+                            //console.log('data', d.LOV_VALUE)
+                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+                          })
+                        }
                 </Input>
                 <Label>Status Description</Label>
                 <Input type="select" name="statusdesc" id="statusdesc">
-                <option value="">Please select</option>
-                        {
+                        {/*<option value="0">Please select</option>
+                        <option value="SIT">SIT</option>
+                        <option value="UAT">UAT</option>
+                        <option value="Regression">Regression</option>
+                        <option value="PT">PT</option>
+                      <option value="Pre Prod">Pre Prod</option>*/}
+                      {
                   Object.values(statusdesc).map((d)=>{
                    //console.log('data', d.LOV_VALUE)
                    return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
@@ -364,56 +265,13 @@ handleSubmitRemark(e){
                 </Col> 
               </Row>
             </CardBody>
+            <Col xs='2' style={{marginLeft: '1100px', marginTop: '20px'}}>
+                <Button block color="primary"> Add Remark</Button>
+                </Col>
 
-                <Row style={{padding: '20px'}}>
-     <Col xs='2'><Label>Latest Remark/Update</Label></Col>
-     <Col xs='10'><div style={{float: 'right'}} onClick={this.togglePrimary} ><Button> Add Remarks </Button></div></Col>
-    </Row>
-    <Modal isOpen={this.state.primary} toggle={this.togglePrimary}
-                       className={'modal-primary ' + this.props.className}>
-                  <ModalHeader toggle={this.togglePrimary}>Add Remark</ModalHeader>
-                  <ModalBody>
-                  <Form id="addRemark" onSubmit={this.handleSubmitRemark}>
-                    <Row>
-                        <Col>
-                        <Label>Update type</Label>
-                            <Input type="select" name="RU_TYPE" id="RU_TYPE" onChange={this.handleChangeRemark}>
-                            <option value="">Please select</option>
-                                    {
-                            Object.values(statusdesc).map((d)=>{
-                            //console.log('data', d.LOV_VALUE)
-                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                            })
-                            }
-                         </Input>
-                        </Col>
-                        <Col>
-                        <Label>Status Date</Label>
-                        <Input type="date" id="RU_STATUS_DATE" name="RU_STATUS_DATE" onChange={this.handleChangeRemark}/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs='12'>
-                        <Label>Remarks</Label>
-                        <Input type="textarea" id="RU_REMARK" name="RU_REMARK" size='20' onChange={this.handleChangeRemark}/>
-                        </Col>
-                    </Row>
-                    <Row style={{marginTop: '20px'}}>
-                        <Col>
-                         <Button color="primary" type="submit" >Add</Button>{' '}
-                        </Col>
-                        <Col>
-                        <Button color="success" type="submit">Update</Button>
-                        </Col>
-                        <Col>
-                        <Button color="warning" type="submit" >Delete</Button>
-                        </Col>
-                    </Row>
-                    </Form>
-                  </ModalBody>
-                  {/* <ModalFooter>
-                  </ModalFooter> */}
-                </Modal>
+  <Col xs='2'><Label>Latest Remark/Update</Label></Col>
+  <Col xs='2'><Button> Add Remarks </Button></Col>
+
 <Row>
   <CardBody>
   <Col xs='12'>
@@ -430,37 +288,33 @@ handleSubmitRemark(e){
     </tr>
   </thead>
   <tbody>
-    {
-        Object.values(this.state.dataRequest).map((d)=>{
-            return(<tr>
-            <td>
-                
-            </td>
-            <td>
-                {d.RU_UPDATED_BY}
-            </td>
-            <td>
-                {d.RU_TYPE}
-
-            </td>
-            <td>
-                {/* {d.RU_STATUS_DATE} */}
-            </td>
-            <td>
-                {/* {d.RU_UPDATED_DATE} */}
-            </td>
-            <td>
-                {d.RU_REMARK}
-            </td>
-            <td>
-
-            </td>
-
-        </tr>
-        )
-
-        })
-    }
+    <tr>
+      <th scope="row">1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
   </tbody>
 </table>
 </Col>
@@ -495,17 +349,11 @@ handleSubmitRemark(e){
                 </Col>
                   <Col xs='4'>
                   <Label>Requestor Name</Label>
-                  <Input type="select" name="requestor" id="requestor">
-                <option value="">Please select</option>
-                   {/*<option value="">Please select</option>
-                   <option value="yes">Yes</option>
-                  <option value="no">No</option> */  }
-                  {
-                           Object.values(requestor).map((d)=>{
-                            //console.log('data', d.LOV_VALUE)
-                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                          })
-                        }
+                  <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="Name1">Name1</option>
+                        <option value="Name2">Name2</option>
+                        <option value="Name3">Name3</option>
                 </Input>
                   </Col>
                   <Col xs='4'>
@@ -564,17 +412,8 @@ handleSubmitRemark(e){
                 <Row>
                   <Col xs='3'>
                 <Label>Consultant 1</Label>
-                <Input type="select" name="consultant" id="consultant">
-                <option value="">Please select</option>
-                   {/*<option value="">Please select</option>
-                   <option value="yes">Yes</option>
-                  <option value="no">No</option> */  }
-                  {
-                           Object.values(consultant).map((d)=>{
-                            //console.log('data', d.LOV_VALUE)
-                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                          })
-                        }
+                <Input type="select" name="consultant1" id="consultant1">
+                   <option value="">Please select</option>
                             
                 </Input>
                 </Col>
@@ -584,17 +423,8 @@ handleSubmitRemark(e){
                 </Col>
                 <Col xs='3'>
                 <Label>Consultants 2</Label>
-                <Input type="select" name="consultant" id="consultant">
-                <option value="">Please select</option>
-                   {/*<option value="">Please select</option>
-                   <option value="yes">Yes</option>
-                  <option value="no">No</option> */  }
-                  {
-                           Object.values(consultant).map((d)=>{
-                            //console.log('data', d.LOV_VALUE)
-                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                          })
-                        }
+                <Input type="select" name="consultant3" id="consultant3">
+                   <option value="">Please select</option>
                        
                 </Input>
                 </Col>
@@ -605,17 +435,8 @@ handleSubmitRemark(e){
 
                 <Col xs='3'>
                 <Label>Consultants 3</Label>
-                <Input type="select" name="consultant" id="consultant">
-                <option value="">Please select</option>
-                   {/*<option value="">Please select</option>
-                   <option value="yes">Yes</option>
-                  <option value="no">No</option> */  }
-                  {
-                           Object.values(consultant).map((d)=>{
-                            //console.log('data', d.LOV_VALUE)
-                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                          })
-                        }
+                <Input type="select" name="consultant1" id="consultant1">
+                   <option value="">Please select</option>
                       
                 </Input>
                 </Col>
@@ -635,17 +456,11 @@ handleSubmitRemark(e){
                 <Row>
                   <Col xs='3'>
                   <Label>GIT Names</Label>
-                  <Input type="select" name="git" id="git">
-                <option value="">Please select</option>
-                   {/*<option value="">Please select</option>
-                   <option value="yes">Yes</option>
-                  <option value="no">No</option> */  }
-                  {
-                           Object.values(git).map((d)=>{
-                            //console.log('data', d.LOV_VALUE)
-                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                          })
-                        }
+                  <Input type="select" name="select" id="select">
+                        <option value="">Please select</option>
+                        <option value="Name1">Name1</option>
+                        <option value="Name2">Name2</option>
+                        <option value="Name3">Name3</option>
                 </Input>
                   </Col>
                   <Col xs='3'>
@@ -673,7 +488,7 @@ handleSubmitRemark(e){
                 <CardBody>
   <Row>
     <Col xs='10'>
-    <table className="table table-bordered table-striped table table-sm">
+    <table class="table table-bordered table-striped table table-sm">
   <thead>
     <tr>
       <th scope="col">No</th>

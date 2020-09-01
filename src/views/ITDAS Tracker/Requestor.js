@@ -28,23 +28,43 @@ import {
 class requestor extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      collapse: true,
-      fadeIn: true,
-      timeout: 300
+      data: [],
+            accordion: [true, false, false, false],
+            LovConsultant : {},
+            LovGIT : {},
     };
   }
 
   componentDidMount(){
-    fetch("/claritybqm/reportFetch/?scriptName=ITDAS_REQUEST_LIST")
-    .then(response => response.json())
-    .then(data => console.log('req list:', data))
+    this.LovConsultant();
+    this.LovGIT();
 
   }
 
+  LovConsultant(){
+    fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=CONSULTANT")
+    .then(response =>  response.json())
+    .then(result =>  {
+      this.setState({ LovConsultant : result.data })
+     }
+     )
+  }
+
+  LovGIT(){
+    fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=GIT")
+    .then(response =>  response.json())
+    .then(result =>  {
+      this.setState({ LovGIT : result.data })
+     }
+     )
+  }
+
   render() {
+    var consultant = this.state.LovConsultant
+    var git = this.state.LovGIT
     return (
+
       <div className="animated fadeIn">
         <Row>
           <Col xs ='12'>
@@ -136,10 +156,18 @@ class requestor extends Component {
                 <Row>
                   <Col xs='2'>
                 <Label>Consultant 1</Label>
-                <Input type="select" name="consultant1" id="consultant1">
-                   <option value="">Please select</option>
+                <Input type="select" name="consultant" id="consultant">
+                <option value="">Please select</option>
+                   {/*<option value="">Please select</option>
                    <option value="yes">Yes</option>
-                   <option value="no">No</option>         
+                  <option value="no">No</option> */  }
+                  {
+                           Object.values(consultant).map((d)=>{
+                            //console.log('data', d.LOV_VALUE)
+                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+                          })
+                        }
+                         
                 </Input>
                 </Col>
                 <Col xs='1'>
@@ -148,10 +176,17 @@ class requestor extends Component {
                 </Col>
                 <Col xs='2'>
                 <Label>Consultants 2</Label>
-                <Input type="select" name="consultant3" id="consultant3">
-                   <option value="">Please select</option>
+                <Input type="select" name="consultant" id="consultant">
+                <option value="">Please select</option>
+                   {/*<option value="">Please select</option>
                    <option value="yes">Yes</option>
-                   <option value="no">No</option>         
+                  <option value="no">No</option> */  }
+                  {
+                           Object.values(consultant).map((d)=>{
+                            //console.log('data', d.LOV_VALUE)
+                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+                          })
+                        }         
                 </Input>
                 </Col>
                 <Col xs='1'>
@@ -161,10 +196,17 @@ class requestor extends Component {
 
                 <Col xs='2'>
                 <Label>Consultants 3</Label>
-                <Input type="select" name="consultant1" id="consultant1">
-                   <option value="">Please select</option>
+                <Input type="select" name="consultant" id="consultant">
+                <option value="">Please select</option>
+                   {/*<option value="">Please select</option>
                    <option value="yes">Yes</option>
-                   <option value="no">No</option>         
+                  <option value="no">No</option> */  }
+                  {
+                           Object.values(consultant).map((d)=>{
+                            //console.log('data', d.LOV_VALUE)
+                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+                          })
+                        }         
                 </Input>
                 </Col>
                 <Col xs='1'>
@@ -184,11 +226,17 @@ class requestor extends Component {
                 <Row>
                   <Col xs='3'>
                   <Label>GIT Names</Label>
-                  <Input type="select" name="select" id="select">
-                        <option value="">Please select</option>
-                        <option value="Name1">Name1</option>
-                        <option value="Name2">Name2</option>
-                        <option value="Name3">Name3</option>
+                  <Input type="select" name="git" id="git">
+                <option value="">Please select</option>
+                   {/*<option value="">Please select</option>
+                   <option value="yes">Yes</option>
+                  <option value="no">No</option> */  }
+                  {
+                           Object.values(git).map((d)=>{
+                            //console.log('data', d.LOV_VALUE)
+                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+                          })
+                        }
                 </Input>
                   </Col>
                   <Col xs='3'>

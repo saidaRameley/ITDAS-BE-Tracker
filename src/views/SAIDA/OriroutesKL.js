@@ -55,7 +55,6 @@ const RequestProfile = React.lazy(() => import('./views/ITDAS Tracker/RequestPro
 const RequestProfileList = React.lazy(() => import('./views/ITDAS Tracker/RequestProfileList'));
 const Requestor = React.lazy(() => import('./views/ITDAS Tracker/Requestor'));
 const AddRemarksList = React.lazy(() => import('./views/ITDAS Tracker/AddRemarksLists'));
-const LandingPage = React.lazy(() => import('./views/ITDAS Tracker/LandingPage'));
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
@@ -83,7 +82,6 @@ const routes = [
   { path: '/Requestor', name: 'Requestor', component: Requestor },
   { path: '/AddRemarksList', name: 'Requestor', component: AddRemarksList },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
-  { path: '/LandingPage', name: 'LandingPage', component: LandingPage },
   { path: '/theme/colors', name: 'Colors', component: Colors },
   { path: '/theme/typography', name: 'Typography', component: Typography },
   { path: '/base', exact: true, name: 'Base', component: Cards },
