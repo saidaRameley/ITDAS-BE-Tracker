@@ -11,23 +11,24 @@ import { connect } from "react-redux";
 
 const propTypes = {
   children: PropTypes.node,
+  username: ""
 };
 
 const defaultProps = {};
 
 class DefaultHeader extends Component {
   componentDidMount() {
-
-    this.props.fetchBadge();
-    this.props.fetchUser();
-
+    var username = localStorage.getItem('username');
+    this.setState({username : username})
+    //this.props.fetchUser();
+    this.props.fetchLOV()
   }
 
   render() {
 
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
-    const task = this.props.badge.Task
+    const task = '0'
 
     return (
       <React.Fragment>
@@ -94,7 +95,6 @@ DefaultHeader.defaultProps = defaultProps;
 
 const mapStateToProps = state => {
   return {
-    badge:state.badge,
     user: state.user,
    
   };
@@ -102,9 +102,9 @@ const mapStateToProps = state => {
 
 const mapDispachToProps = dispatch => {
   return {
-    fetchBadge: () => dispatch({ type: "FETCH_BADGE"}),
+
     fetchUser: () => dispatch({ type: "FETCH_USER"}),
-     
+    fetchLOV: () => dispatch({ type: "FETCH_LOV"}),
   };
 };
 

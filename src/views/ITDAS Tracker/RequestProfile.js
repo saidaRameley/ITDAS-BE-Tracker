@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Badge, Form, Table, FormText, Button,Input, Label, Card, CardBody, CardFooter, CardHeader, Col, Collapse, Fade, Row,Modal, ModalBody, ModalFooter, ModalHeader,  } from 'reactstrap';
 import $ from 'jquery';
 import axios from 'axios';
-
+import Swal from 'sweetalert2'
 class CreateBE extends Component {
 
     constructor(props) {
@@ -12,10 +12,15 @@ class CreateBE extends Component {
         this.togglePrimary = this.togglePrimary.bind(this);
         this.handleSubmitRemark = this.handleSubmitRemark.bind(this);
         this.handleChangeRemark = this.handleChangeRemark.bind(this);
+        this.onSubmitTM = this.onSubmitTM.bind(this);
+        this.onChangeSysTM = this.onChangeSysTM.bind(this);
+        this.onChangeRequestor = this.onChangeRequestor.bind(this);
+        this.addRequestor = this.addRequestor.bind(this);
         // Don't call this.setState() here!
         this.state = {
             data: [],
             accordion: [true, false, false, false],
+            //requestorID: "",
             Lovcategory : {},
             LovCatType: {},
             LovSystem: {},
@@ -25,17 +30,25 @@ class CreateBE extends Component {
             LovLOB: {},
             LovConsultant : {},
             LovGIT : {},
-            LovRequestor : {},
+            LovRequestor :{},
             primary: false,
             dataRequest: {},
+            dataSysTM : {},
+            dataRequestor : {},
         };
 
     }
 
     componentDidMount(){
         // console.log('testt');
+        //generate requestor ID:
+       //var reqID = localStorage.getItem('requestorID')
+       //if(reqID === ""){
+        this.generateRequstorID();
+      // }
+       
        this.lovCategory();
-      //  this.lovCatType();
+       //this.lovCatType();
        this.lovSystem();
        this.lovPillar();
        this.lovStatus();
@@ -43,104 +56,215 @@ class CreateBE extends Component {
        this.lovLOB();
        this.LovConsultant();
        this.LovGIT();
-       this.LovRequestor();
-       this.getReqList();
+       this.LovRequstor();
+       //this.getReqList();
        }
        
+       generateRequstorID(){
+         //system will auto generate requestor id
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_REQ_SEQ",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
+        .then(response =>  response.json())
+        .then(result =>  {
+          //console.log('requestorID',result[0]);
+          //this.setState({ requestorID : result[0].REQ_ID })
+          localStorage.setItem('requestorID', result[0].REQ_ID)
+          axios.post('/api/ITD_REQUEST_CREATE', {data: {REQ_ID: result[0].REQ_ID}},
+          {
+           headers: {
+             Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+           }
+          }
+          ).then((res) => {
+            console.log('success to create ', res);   
+          })
+          .catch((err) => {
+            console.log('failed to create ', err);
+          });
+          
+         })       
+       }
+
        lovCategory(){
-         fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=CATEGORY")
+        var accessToken = localStorage.getItem('token');
+        //console.log('token',accessToken)
+         fetch("/api/ITD_LOV/?type=CATEGORY",
+         {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
         .then(response =>  response.json())
         .then(result =>  {
           //console.log('result',result.data);
-          this.setState({Lovcategory : result.data})
+          this.setState({Lovcategory : result})
          }
          )
        }
        
        lovCatType(e){
        //console.log('lovCatType', e.target.value);
-         fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=CATEGORY&value=" + e.target.value)
+         var accessToken = localStorage.getItem('token');
+
+         fetch("/api/ITD_LOV/?type=CATEGORY&value=" + e.target.value,
+         {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
         .then(response =>  response.json())
         .then(result =>  {
          //console.log('lovCatType-result',result.data);
-          this.setState({LovCatType : result.data})
+          this.setState({LovCatType : result})
          }
          )
        }
        
        lovSystem(){
-         fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=SYSTEM")
+        var accessToken = localStorage.getItem('token');
+         fetch("/api/ITD_LOV/?type=SYSTEM",
+         {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
          .then(response =>  response.json())
          .then(result =>  {
-           this.setState({ LovSystem : result.data })
+           this.setState({ LovSystem : result })
           }
           )
        }
 
        lovPillar(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=PILLAR")
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_LOV/?type=PILLAR",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+        )
         .then(response =>  response.json())
         .then(result =>  {
-          this.setState({ LovPillar : result.data })
+          this.setState({ LovPillar : result })
          })
        }
 
        lovStatus(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=STATUS")
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_LOV/?type=STATUS",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
         .then(response =>  response.json())
         .then(result =>  {
-          this.setState({ LovStatus : result.data })
+          //console.log('status:',result);
+          this.setState({ LovStatus : result })
          })
        }
 
        lovStatusDesc(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=STATUS_DESC")
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_LOV/?type=STATUS_DESC",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
         .then(response =>  response.json())
         .then(result =>  {
-          this.setState({ LovStatusDesc : result.data })
+          this.setState({ LovStatusDesc : result })
          })
        }
 
        lovLOB(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=LOB")
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_LOV/?type=LOB",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
         .then(response =>  response.json())
         .then(result =>  {
-          this.setState({ LovLOB : result.data })
+          this.setState({ LovLOB : result })
          })
        }
 
-       LovRequestor(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=LOB&value=UNIFI")
-        .then(response =>  response.json())
-        .then(result =>  {
-          this.setState({ LovRequestor : result.data })
+       LovConsultant(){
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_LOV/?type=CONSULTANT",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
          }
          )
-      }
-
-       LovConsultant(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=CONSULTANT")
         .then(response =>  response.json())
         .then(result =>  {
-          this.setState({ LovConsultant : result.data })
+          this.setState({ LovConsultant : result })
          }
          )
       }
 
       LovGIT(){
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_LOV&type=GIT")
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_LOV/?type=GIT",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
         .then(response =>  response.json())
         .then(result =>  {
-          this.setState({ LovGIT : result.data })
+          this.setState({ LovGIT : result })
          }
          )
       }
 
-      getReqList(){
-
-        fetch("/claritybqm/reportFetch/?scriptName=ITD_REQUEST_LIST")
+      LovRequstor(){
+        var accessToken = localStorage.getItem('token');
+        fetch("/api/ITD_LOV/?type=LOB&value=UNIFI",
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+         )
         .then(response =>  response.json())
         .then(result =>  {
+          this.setState({ LovRequestor : result })
+         })
+       
+      }
+      getReqList(){
+        var accessToken = localStorage.getItem('token');
+        var reqID = localStorage.getItem('requestorID');
+        fetch("/api/ITD_REQUEST_LIST/?REQ_ID=" + reqID,
+        {
+          headers: {
+            Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+          }
+         }
+        )
+        .then(response =>  response.json())
+        .then(result =>  {
+          console.log('getReqList',result);
           this.setState({ dataRequest : result.req_update })
          }
          )   
@@ -186,6 +310,7 @@ handleSubmitRemark(e){
     e.preventDefault();
     var $inputs = $('#addRemark :input');//get form values
     var values = {};
+    var reqID = localStorage.getItem('requestorID');
 
     $inputs.each(function () {
         if ($(this).is(':radio') == true || $(this).is(':checkbox') == true){
@@ -194,15 +319,34 @@ handleSubmitRemark(e){
               else {
           values[this.name] = $(this).val() == undefined ? "" : $(this).val();
         }
-        values['REQ_ID'] = '88';
+        values['REQ_ID'] = reqID;
         values['RU_ID'] = '';
         values['RU_UPDATED_BY'] = 'TMXXXXX';
      });
 
      //console.log('addremark', values);
-     axios.post('/claritybqm/reportFetchJ/?scriptName=ITD_REQ_STAT_UPD_CREATE', values,
+     var accessToken = localStorage.getItem('token');
+     axios.post('/api/ITD_REQ_STAT_UPD_CREATE', {data: values},
+     {
+      headers: {
+        Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+      }
+     }
      ).then((res) => {
        console.log('success to create ', res);   
+       if(res.data.response === "unauthorized") {
+        localStorage.removeItem("token");
+        localStorage.removeItem("requestorID");
+        Swal.fire({
+            position: 'center',
+            icon: 'info',
+            title: 'Your session has timed out!',
+            showConfirmButton: false,
+            timer: 1000
+          })
+        setTimeout(function(){ this.props.history.push('/login') }, 2000);
+       
+     }
        this.getReqList();
        this.togglePrimary()
      })
@@ -212,8 +356,169 @@ handleSubmitRemark(e){
 
 
 }
+
+onChangeRequestor(e){
+
+  e.preventDefault();
+  //console.log({[e.target.name]: e.target.value});
+  this.setState({ [e.target.name]: e.target.value });
+
+}
+
+addRequestor(){
+  var reqID = localStorage.getItem('requestorID');
+
+  if(this.state.RQ_REQUESTOR_NAME || this.state.RQ_LOB || this.state.RQ_EMAIL){
+
+    var values = {
+      'RQ_REQ_ID' : reqID,
+      'RQ_REQUESTOR_NAME' : this.state.RQ_REQUESTOR_NAME,
+      'RQ_LOB' : this.state.RQ_LOB,
+      'RQ_EMAIL' : this.state.RQ_EMAIL
+    }
+  
+    var accessToken = localStorage.getItem('token');
+    axios.post('/api/ITD_REQ_REQUESTOR_CREATE', {data: values},
+    {
+     headers: {
+       Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+     }
+    }
+    ).then((res) => {
+      console.log('success to create ', res);   
+      //timeout process
+      if(res.data.response === "unauthorized") {
+       localStorage.removeItem("token");
+       localStorage.removeItem("requestorID");
+       Swal.fire({
+           position: 'center',
+           icon: 'info',
+           title: 'Your session has timed out!',
+           showConfirmButton: false,
+           timer: 1000
+         })
+       setTimeout(function(){ this.props.history.push('/login') }, 2000);
+      
+    }
+    //success
+    else{
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: 'Data has been added.',
+        showConfirmButton: false,
+        timer: 1000
+      })
+
+      var accessToken = localStorage.getItem('token');
+      var reqID = localStorage.getItem('requestorID');
+      fetch("/api/ITD_REQUEST_LIST/?REQ_ID=" + reqID,
+      {
+        headers: {
+          Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+        }
+       }
+      )
+      .then(response =>  response.json())
+      .then(result =>  {
+        //console.log('getReqList',result);
+        this.setState({ dataRequestor : result.req_requestor })
+       }
+       )   
+
+    }
+   
+    })
+    .catch((err) => {
+      console.log('failed to create ', err);
+    });
+
+  }
+
+
+}
+
+
+onChangeSysTM(e){
+
+  e.preventDefault();
+
+  this.setState({ [e.target.name]: e.target.value });
+
+}
+
+onSubmitTM(){
+  var reqID = localStorage.getItem('requestorID');
+
+  if(this.state.IM_IMPACTED_SYSTEM || this.state.IM_MANDAYS){
+
+    var values = {
+      'IM_REQ_ID' : reqID,
+      'IM_IMPACTED_SYSTEM' : this.state.IM_IMPACTED_SYSTEM,
+      'IM_MANDAYS' : this.state.IM_MANDAYS
+    }
+
+    var accessToken = localStorage.getItem('token');
+    axios.post('/api/ITD_REQ_SYS_TM_CREATE', {data: values},
+    {
+     headers: {
+       Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+     }
+    }
+    ).then((res) => {
+      console.log('success to create ', res);   
+      //timeout process
+      if(res.data.response === "unauthorized") {
+       localStorage.removeItem("token");
+       localStorage.removeItem("requestorID");
+       Swal.fire({
+           position: 'center',
+           icon: 'info',
+           title: 'Your session has timed out!',
+           showConfirmButton: false,
+           timer: 1000
+         })
+       setTimeout(function(){ this.props.history.push('/login') }, 2000);
+      
+    }
+    //success
+    else{
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: 'Data has been added.',
+        showConfirmButton: false,
+        timer: 1000
+      })
+
+      var accessToken = localStorage.getItem('token');
+      var reqID = localStorage.getItem('requestorID');
+      fetch("/api/ITD_REQUEST_LIST/?REQ_ID=" + reqID,
+      {
+        headers: {
+          Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+        }
+       }
+      )
+      .then(response =>  response.json())
+      .then(result =>  {
+        //console.log('getReqList',result);
+        this.setState({ dataSysTM : result.req_sys_tm })
+       }
+       )   
+
+    }
+   
+    })
+    .catch((err) => {
+      console.log('failed to create ', err);
+    });
+
+  }
+
+}
     render() {
-       // console.log('dataRequest:', this.state.dataRequest);
+        console.log('dataRequest:', this.state);
         var category = this.state.Lovcategory
         var type = this.state.LovCatType
         var system = this.state.LovSystem
@@ -221,9 +526,12 @@ handleSubmitRemark(e){
         var status = this.state.LovStatus
         var statusdesc = this.state.LovStatusDesc
         var lob = this.state.LovLOB
-        var requestor = this.state.LovRequestor
         var consultant = this.state.LovConsultant
         var git = this.state.LovGIT
+        var reqID = localStorage.getItem('requestorID')
+        var reqSysTM = this.state.dataSysTM
+        var requestor = this.state.LovRequestor
+        var dataRequestor = this.state.dataRequestor
         return (
             <div>
 
@@ -258,6 +566,8 @@ handleSubmitRemark(e){
                       <CardBody>
               <Row>
                 <Col xs='3'>
+                <Label>Requestor ID</Label>
+                <Input type="text" id="REQ_ID"name="REQ_ID" value={reqID} readOnly/>
                 <Label>Reference #</Label>
                 <Input type="text" id="reference"name="reference"/>
                 <Label>Ext Ref # (IRIS No/Proj No)</Label>
@@ -365,11 +675,12 @@ handleSubmitRemark(e){
               </Row>
             </CardBody>
 
-                <Row style={{padding: '20px'}}>
-     <Col xs='2'><Label>Latest Remark/Update</Label></Col>
-     <Col xs='10'><div style={{float: 'right'}} onClick={this.togglePrimary} ><Button> Add Remarks </Button></div></Col>
-    </Row>
-    <Modal isOpen={this.state.primary} toggle={this.togglePrimary}
+            <Col xs="12" sm="12" md="12">
+                        <Card className="border-primary">
+                        <CardHeader>
+                        <strong>Latest Remark/Update</strong>
+                        <Col xs='12'><div style={{float: 'right'}} onClick={this.togglePrimary} ><Button type="back" color="primary"> Add Remarks </Button></div></Col>
+                        <Modal isOpen={this.state.primary} toggle={this.togglePrimary}
                        className={'modal-primary ' + this.props.className}>
                   <ModalHeader toggle={this.togglePrimary}>Add Remark</ModalHeader>
                   <ModalBody>
@@ -379,7 +690,7 @@ handleSubmitRemark(e){
                         <Label>Update type</Label>
                             <Input type="select" name="RU_TYPE" id="RU_TYPE" onChange={this.handleChangeRemark}>
                             <option value="">Please select</option>
-                                    {
+                            {
                             Object.values(statusdesc).map((d)=>{
                             //console.log('data', d.LOV_VALUE)
                             return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
@@ -414,9 +725,9 @@ handleSubmitRemark(e){
                   {/* <ModalFooter>
                   </ModalFooter> */}
                 </Modal>
-<Row>
-  <CardBody>
-  <Col xs='12'>
+                        </CardHeader>
+                        <CardBody>
+                        <Col xs='15'>
     <table className="table table-bordered table-striped table table-sm">
   <thead>
     <tr>
@@ -465,9 +776,10 @@ handleSubmitRemark(e){
 </table>
 </Col>
 </CardBody>
-</Row>
-                    </Collapse>
-                  </Card>
+</Card>
+</Col>
+</Collapse>
+</Card>
 
                   <Card className="mb-0">
                     <CardHeader id="headingTwo">
@@ -483,7 +795,7 @@ handleSubmitRemark(e){
                 <Row>
                 <Col xs='3'>
                 <Label>LOB</Label>
-                <Input type="select" name="LOB" id="LOB">
+                <Input type="select" name="RQ_LOB" id="RQ_LOB" onChange={this.onChangeRequestor}>
                 <option value="">Please select</option>
                    {
                    Object.values(lob).map((d)=>{
@@ -493,10 +805,10 @@ handleSubmitRemark(e){
                }
                 </Input>
                 </Col>
-                  <Col xs='4'>
+                  <Col xs='3'>
                   <Label>Requestor Name</Label>
-                  <Input type="select" name="requestor" id="requestor">
-                <option value="">Please select</option>
+                  <Input type="select" name="RQ_REQUESTOR_NAME" id="RQ_REQUESTOR_NAME" onChange={this.onChangeRequestor}>
+                     <option value="">Please select</option>
                    {/*<option value="">Please select</option>
                    <option value="yes">Yes</option>
                   <option value="no">No</option> */  }
@@ -505,22 +817,22 @@ handleSubmitRemark(e){
                             //console.log('data', d.LOV_VALUE)
                             return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
                           })
-                        }
+                 }
                 </Input>
                   </Col>
-                  <Col xs='4'>
+                  <Col xs='3'>
                 <Label>Email Address</Label>
-                <Input type="text" id="emailaddress"name="emailaddress"/>
+                <Input type="text" id="RQ_EMAIL"name="RQ_EMAIL" onChange={this.onChangeRequestor}/>
                 </Col>
                 <Col xs='1' style={{marginLeft: '30px', marginTop: '25px'}}>
-                      <Button block color="primary"> Add</Button>
+                      <Button block color="primary" type="submit" onClick={this.addRequestor}> Add</Button>
                 </Col>
                    </Row>
                     </CardBody>
                    
 <CardBody>
   <Row>
-    <Col xs='10'>
+    <Col xs='11'>
     <table className="table table-bordered table-striped table table-sm">
   <thead>
     <tr>
@@ -531,24 +843,26 @@ handleSubmitRemark(e){
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+    {
+      Object.values(dataRequestor).map((d)=>{
+        return(<tr>
+          <td>
+              
+          </td>
+          <td>
+              {d.RQ_REQUESTOR_NAME}
+          </td>
+          <td>
+              {d.RQ_LOB}
+
+          </td>
+          <td>
+              {d.RQ_EMAIL}
+
+          </td>
+      </tr>)
+      })
+    }
   </tbody>
 </table>
 </Col>
@@ -562,8 +876,8 @@ handleSubmitRemark(e){
             </Card>
               <CardBody>
                 <Row>
-                  <Col xs='3'>
-                <Label>Consultant 1</Label>
+                <Col xs='4'>
+                  <Label>Consultant 1</Label>
                 <Input type="select" name="consultant" id="consultant">
                 <option value="">Please select</option>
                    {/*<option value="">Please select</option>
@@ -574,15 +888,17 @@ handleSubmitRemark(e){
                             //console.log('data', d.LOV_VALUE)
                             return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
                           })
-                        }
-                            
+                        }               
                 </Input>
                 </Col>
-                <Col xs='1'>
+                <Col xs='4'>
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
-                <Col xs='3'>
+                </Row>
+
+                <Row>
+                <Col xs='4'>
                 <Label>Consultants 2</Label>
                 <Input type="select" name="consultant" id="consultant">
                 <option value="">Please select</option>
@@ -598,12 +914,14 @@ handleSubmitRemark(e){
                        
                 </Input>
                 </Col>
-                <Col xs='1'>
+                <Col xs='4'>
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
+                </Row>
 
-                <Col xs='3'>
+                <Row>
+                <Col xs='4'>
                 <Label>Consultants 3</Label>
                 <Input type="select" name="consultant" id="consultant">
                 <option value="">Please select</option>
@@ -615,11 +933,10 @@ handleSubmitRemark(e){
                             //console.log('data', d.LOV_VALUE)
                             return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
                           })
-                        }
-                      
+                        }       
                 </Input>
                 </Col>
-                <Col xs='1'>
+                <Col xs='4'>
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
@@ -657,15 +974,21 @@ handleSubmitRemark(e){
                             //console.log('data', d.LOV_VALUE)
                             return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
                             })
-                            }
+                            }                           
                 </Input>
                 </Col>
+                
+                <Col xs='3'>
+                <Label>Email Address</Label>
+                <Input type="text" id="RQ_EMAIL"name="RQ_EMAIL" onChange={this.onChangeRequestor}/>
+                </Col>
+
                 <Col xs='1'>
                 <Label>Tag Cost</Label>
                 <Input type="text" id="tagcost"name="tagcost"/>
                 </Col>
                 <Col xs='1' style={{marginLeft: '30px', marginTop: '25px'}}>
-                                <Button block color="primary"> Add</Button>
+                <Button block color="primary" type="submit" onClick={this.addRequestor}> Add</Button>
                             </Col>
                   </Row>
                 </CardBody>
@@ -808,10 +1131,10 @@ handleSubmitRemark(e){
                             </CardBody>
                             </Card>
                             </Col>
-
+                             {/** add system TM */}
                             <Col xs='3'>
-                            <Label>Impacted Sytem</Label>
-                            <Input type="select" id="impactedSystem"name="impactedSystem">
+                            <Label>Impacted System</Label>
+                            <Input type="select" id="IM_IMPACTED_SYSTEM" name="IM_IMPACTED_SYSTEM" onChange={this.onChangeSysTM}>
                             <option value="0">Please select</option>
                             {
                             Object.values(system).map((d)=>{
@@ -822,13 +1145,13 @@ handleSubmitRemark(e){
                            </Input>
                            <Col style={{marginLeft: '30px', marginTop: '25px'}}>
                             </Col>
-                            <button class="btn btn-primary" type="submit">Add</button>
+                            <button class="btn btn-primary" type="submit" onClick={this.onSubmitTM}>Add</button>
                             </Col>
                             <Col xs='3'>
                             <Label>Mandays</Label>
-                            <Input type="text" id="mandays"name="mandays" />
+                            <Input type="text" id="IM_MANDAYS" name="IM_MANDAYS" onChange={this.onChangeSysTM}/>
                             </Col>
-
+                              {/** add system EXTERNAL */}
                             <Col xs='3'>
                             <Label>Vendor</Label>
                             <Input type="select" id="vendor"name="vendor"/>
@@ -848,9 +1171,8 @@ handleSubmitRemark(e){
                         </Input>
                         <Col style={{marginLeft: '30px', marginTop: '25px'}}>
                             </Col>
-                            <button class="btn btn-primary" type="submit">Add</button>
+                            <button class="btn btn-primary" type="submit" onClick={this.onSubmitTM}>Add</button>
                             </Col>
-
                         <Col xs="12" lg="6">
                         <Card>
                         <CardBody>
@@ -863,16 +1185,24 @@ handleSubmitRemark(e){
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Nova</td>
-                                <td>12</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Siebel</td>
-                                <td>5</td>
-                            </tr>
+                            {
+                                Object.values(reqSysTM).map((d)=>{
+                                    return(<tr>
+                                    <td>
+                                        
+                                    </td>
+                                    <td>
+                                        {d.IM_IMPACTED_SYSTEM}
+                                    </td>
+                                    <td>
+                                        {d.IM_MANDAYS}
+
+                                    </td>
+                                </tr>
+                                )
+
+                                })
+                            }
                             </tbody>
                             </Table>
                         </CardBody>

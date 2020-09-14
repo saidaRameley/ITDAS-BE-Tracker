@@ -9,7 +9,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
+    "url": "git+ssh://git@github.com/coreui/coreui-free-react-admin-template.git"
   },
   "dependencies": {
     "@coreui/coreui": "^2.1.12",
@@ -93,5 +93,6 @@
     "node": ">=8.10",
     "npm": ">=6"
   },
-  "proxy": "https://10.54.5.141:3443"
+  "proxy": "http://localhost:5004",
+  "main": "index.js"
 }
