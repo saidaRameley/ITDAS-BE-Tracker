@@ -16,6 +16,8 @@ class CreateBE extends Component {
         this.onChangeSysTM = this.onChangeSysTM.bind(this);
         this.onChangeRequestor = this.onChangeRequestor.bind(this);
         this.addRequestor = this.addRequestor.bind(this);
+        this.addGITAssessors = this.addGITAssessors.bind(this);
+        this.onChangeGITAssessors = this.onChangeGITAssessors.bind(this);
         // Don't call this.setState() here!
         this.state = {
             data: [],
@@ -35,17 +37,19 @@ class CreateBE extends Component {
             dataRequest: {},
             dataSysTM : {},
             dataRequestor : {},
+            dataGITAssessors : {},
         };
 
     }
 
     componentDidMount(){
-        // console.log('testt');
-        //generate requestor ID:
-       //var reqID = localStorage.getItem('requestorID')
-       //if(reqID === ""){
-        this.generateRequstorID();
-      // }
+      localStorage.setItem('requestorID', '100189')
+      // console.log('testt');
+      //generate requestor ID:
+     //var reqID = localStorage.getItem('requestorID')
+     //if(reqID === ""){
+      //this.generateRequstorID();
+    // }
        
        this.lovCategory();
        //this.lovCatType();
@@ -57,7 +61,8 @@ class CreateBE extends Component {
        this.LovConsultant();
        this.LovGIT();
        this.LovRequstor();
-       //this.getReqList();
+       this.getReqList();
+       this.getRequestorList();
        }
        
        generateRequstorID(){
@@ -410,9 +415,96 @@ addRequestor(){
         timer: 1000
       })
 
+      this.getRequestorList();
+
+    }
+   
+    })
+    .catch((err) => {
+      console.log('failed to create ', err);
+    });
+
+  }
+
+
+}
+
+getRequestorList(){
+
+  var accessToken = localStorage.getItem('token');
+  var reqID = localStorage.getItem('requestorID');
+  fetch("/api/ITD_REQUEST_LIST/?REQ_ID=" + reqID,
+  {
+    headers: {
+      Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+    }
+   }
+  )
+  .then(response =>  response.json())
+  .then(result =>  {
+    //console.log('getReqList',result);
+    this.setState({ dataRequestor : result.req_requestor })
+   }
+   )   
+
+}
+onChangeGITAssessors(e){
+
+  e.preventDefault();
+  //console.log({[e.target.name]: e.target.value});
+  this.setState({ [e.target.name]: e.target.value });
+
+}
+
+addGITAssessors(){
+  var reqID = localStorage.getItem('requestorID');
+
+  if(this.state.RG_REQ_ID || this.state.RG_NAME || this.state.RG_SYSTEM || this.state.RG_EMAIL || this.state.RG_TAGCOST){
+
+    var values = {
+      'RG_REQ_ID' : reqID,
+      'RG_NAME' : this.state.RG_NAME,
+      'RG_SYSTEM' : this.state.RG_SYSTEM,
+      'RG_EMAIL' : this.state.RG_EMAIL,
+      'RG_TAGCOST' : this.state.RG_TAGCOST
+    }
+  
+    var accessToken = localStorage.getItem('token');
+    axios.post('/api/ITD_REQ_GIT_CREATE', {data: values},
+    {
+     headers: {
+       Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+     }
+    }
+    ).then((res) => {
+      console.log('success to create ', res);   
+      //timeout process
+      if(res.data.response === "unauthorized") {
+       localStorage.removeItem("token");
+       localStorage.removeItem("requestorID");
+       Swal.fire({
+           position: 'center',
+           icon: 'info',
+           title: 'Your session has timed out!',
+           showConfirmButton: false,
+           timer: 1000
+         })
+       setTimeout(function(){ this.props.history.push('/login') }, 2000);
+      
+    }
+    //success
+    else{
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: 'Data has been added.',
+        showConfirmButton: false,
+        timer: 1000
+      })
+
       var accessToken = localStorage.getItem('token');
       var reqID = localStorage.getItem('requestorID');
-      fetch("/api/ITD_REQUEST_LIST/?REQ_ID=" + reqID,
+      fetch("/api/ITD_REQ_GIT_VIEW/?REQ_ID=" + reqID,
       {
         headers: {
           Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
@@ -422,7 +514,7 @@ addRequestor(){
       .then(response =>  response.json())
       .then(result =>  {
         //console.log('getReqList',result);
-        this.setState({ dataRequestor : result.req_requestor })
+        this.setState({ dataGITAssessors : result.user })
        }
        )   
 
@@ -532,6 +624,7 @@ onSubmitTM(){
         var reqSysTM = this.state.dataSysTM
         var requestor = this.state.LovRequestor
         var dataRequestor = this.state.dataRequestor
+        var dataGITAssessors = this.state.dataGITAssessors
         return (
             <div>
 
@@ -675,11 +768,11 @@ onSubmitTM(){
               </Row>
             </CardBody>
 
-            <Col xs="12" sm="12" md="12">
+            <Col xs="5" sm="5" md="12">
                         <Card className="border-primary">
                         <CardHeader>
                         <strong>Latest Remark/Update</strong>
-                        <Col xs='12'><div style={{float: 'right'}} onClick={this.togglePrimary} ><Button type="back" color="primary"> Add Remarks </Button></div></Col>
+                        <div style={{float: 'right'}} onClick={this.togglePrimary} ><Button type="back" color="primary"> Add Remarks </Button></div>
                         <Modal isOpen={this.state.primary} toggle={this.togglePrimary}
                        className={'modal-primary ' + this.props.className}>
                   <ModalHeader toggle={this.togglePrimary}>Add Remark</ModalHeader>
@@ -742,9 +835,10 @@ onSubmitTM(){
   </thead>
   <tbody>
     {
-        Object.values(this.state.dataRequest).map((d)=>{
+        this.state.dataRequest ? Object.values(this.state.dataRequest).map((d,index)=>{
             return(<tr>
             <td>
+              {index+1}
                 
             </td>
             <td>
@@ -770,7 +864,7 @@ onSubmitTM(){
         </tr>
         )
 
-        })
+        }) : ""
     }
   </tbody>
 </table>
@@ -781,55 +875,54 @@ onSubmitTM(){
 </Collapse>
 </Card>
 
-                  <Card className="mb-0">
-                    <CardHeader id="headingTwo">
-                      <Button block color="link" className="text-left m-0 p-0" onClick={() => this.toggleAccordion(1)} aria-expanded={this.state.accordion[1]} aria-controls="collapseTwo">
-                        <h6 className="m-0 p-0"><strong>REQUESTOR, CONSULTANTS, GIT ASSESSORS</strong></h6>
-                      </Button>
-                    </CardHeader>
-                    <Collapse isOpen={this.state.accordion[1]} data-parent="#accordion" id="collapseTwo">
-                    <CardHeader>
-                    <strong>REQUESTOR</strong>
-                   </CardHeader>
-                    <CardBody>
-                <Row>
-                <Col xs='3'>
-                <Label>LOB</Label>
-                <Input type="select" name="RQ_LOB" id="RQ_LOB" onChange={this.onChangeRequestor}>
-                <option value="">Please select</option>
-                   {
-                   Object.values(lob).map((d)=>{
-                   //console.log('data', d.LOV_VALUE)
-                   return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                 })
-               }
-                </Input>
-                </Col>
-                  <Col xs='3'>
-                  <Label>Requestor Name</Label>
-                  <Input type="select" name="RQ_REQUESTOR_NAME" id="RQ_REQUESTOR_NAME" onChange={this.onChangeRequestor}>
-                     <option value="">Please select</option>
-                   {/*<option value="">Please select</option>
-                   <option value="yes">Yes</option>
-                  <option value="no">No</option> */  }
-                  {
-                           Object.values(requestor).map((d)=>{
-                            //console.log('data', d.LOV_VALUE)
-                            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
-                          })
-                 }
-                </Input>
-                  </Col>
-                  <Col xs='3'>
-                <Label>Email Address</Label>
-                <Input type="text" id="RQ_EMAIL"name="RQ_EMAIL" onChange={this.onChangeRequestor}/>
-                </Col>
-                <Col xs='1' style={{marginLeft: '30px', marginTop: '25px'}}>
-                      <Button block color="primary" type="submit" onClick={this.addRequestor}> Add</Button>
-                </Col>
-                   </Row>
-                    </CardBody>
-                   
+  <Card className="mb-0">
+    <CardHeader id="headingTwo">
+    <Button block color="link" className="text-left m-0 p-0" onClick={() => this.toggleAccordion(1)} aria-expanded={this.state.accordion[1]} aria-controls="collapseTwo">
+      <h6 className="m-0 p-0"><strong>REQUESTOR, CONSULTANTS, GIT ASSESSORS</strong></h6></Button>
+    </CardHeader>
+    <Collapse isOpen={this.state.accordion[1]} data-parent="#accordion" id="collapseTwo">
+    <CardHeader>
+     <strong>REQUESTOR</strong>
+    </CardHeader>
+     <CardBody>
+      <Row>
+      <Col xs='3'>
+      <Label>LOB</Label>
+      <Input type="select" name="RQ_LOB" id="RQ_LOB" onChange={this.onChangeRequestor}>
+      <option value="">Please select</option>
+        {
+         Object.values(lob).map((d)=>{
+           //console.log('data', d.LOV_VALUE)
+            return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+            })
+            }
+          </Input>
+          </Col>
+          <Col xs='3'>
+          <Label>Requestor Name</Label>
+          <Input type="select" name="RQ_REQUESTOR_NAME" id="RQ_REQUESTOR_NAME" onChange={this.onChangeRequestor}>
+          <option value="">Please select</option>
+           {/*<option value="">Please select</option>
+           <option value="yes">Yes</option>
+           <option value="no">No</option> */  }
+           {
+             Object.values(requestor).map((d)=>{
+              //console.log('data', d.LOV_VALUE)
+               return <option key={d.LOV_VALUE} value={d.LOV_VALUE}>{d.LOV_VALUE}</option>
+               })
+              }
+            </Input>
+              </Col>
+              <Col xs='3'>
+               <Label>Email Address</Label>
+              <Input type="text" id="RQ_EMAIL"name="RQ_EMAIL" onChange={this.onChangeRequestor}/>
+              </Col>
+              <Col xs='1' style={{marginLeft: '30px', marginTop: '25px'}}>
+                    <Button block color="primary" type="submit" onClick={this.addRequestor}> Add</Button>
+          </Col>
+      </Row>
+  </CardBody>
+              
 <CardBody>
   <Row>
     <Col xs='11'>
@@ -844,9 +937,10 @@ onSubmitTM(){
   </thead>
   <tbody>
     {
-      Object.values(dataRequestor).map((d)=>{
+      Object.values(dataRequestor).map((d,index)=>{
         return(<tr>
           <td>
+            {index+1}
               
           </td>
           <td>
@@ -952,7 +1046,7 @@ onSubmitTM(){
                 <Row>
                   <Col xs='3'>
                   <Label>GIT Names</Label>
-                  <Input type="select" name="git" id="git">
+                  <Input type="select" name="RG_NAME" id="RG_NAME" onChange={this.onChangeGITAssessors}>
                 <option value="">Please select</option>
                    {/*<option value="">Please select</option>
                    <option value="yes">Yes</option>
@@ -965,9 +1059,9 @@ onSubmitTM(){
                         }
                 </Input>
                   </Col>
-                  <Col xs='3'>
+                  <Col xs='2'>
                 <Label>System</Label>
-                <Input type="select" name="system" id="system">
+                <Input type="select" name="RG_SYSTEM" id="RG_SYSTEM" onChange={this.onChangeGITAssessors}>
                         <option value="">Please select</option>
                         {
                             Object.values(system).map((d)=>{
@@ -980,61 +1074,65 @@ onSubmitTM(){
                 
                 <Col xs='3'>
                 <Label>Email Address</Label>
-                <Input type="text" id="RQ_EMAIL"name="RQ_EMAIL" onChange={this.onChangeRequestor}/>
+                <Input type="text" id="RG_EMAIL"name="RG_EMAIL" onChange={this.onChangeGITAssessors}/>
                 </Col>
 
-                <Col xs='1'>
+                <Col xs='2'>
                 <Label>Tag Cost</Label>
-                <Input type="text" id="tagcost"name="tagcost"/>
+                <Input type="text" id="RG_TAGCOST"name="RG_TAGCOST" onChange={this.onChangeGITAssessors}/>
                 </Col>
                 <Col xs='1' style={{marginLeft: '30px', marginTop: '25px'}}>
-                <Button block color="primary" type="submit" onClick={this.addRequestor}> Add</Button>
+                <Button block color="primary" type="submit" onClick={this.addGITAssessors}> Add</Button>
                             </Col>
                   </Row>
                 </CardBody>
 
                 <CardBody>
   <Row>
-    <Col xs='10'>
+    <Col xs='11'>
     <table className="table table-bordered table-striped table table-sm">
   <thead>
     <tr>
       <th scope="col">No</th>
-      <th scope="col">Name</th>
+      <th scope="col">GIT Name</th>
       <th scope="col">System</th>
       <th scope="col">Email ID</th>
       <th scope="col">Tag Cost</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+  {
+     dataGITAssessors ? Object.values(dataGITAssessors).map((d,index)=>{
+        return(<tr>
+          <td>
+            {index+1}
+              
+          </td>
+          <td>
+              {d.RG_NAME}
+          </td>
+          <td>
+              {d.RG_SYSTEM}
+
+          </td>
+          <td>
+              {d.RG_EMAIL}
+
+          </td>
+          <td>
+              {d.RG_TAGCOST}
+
+          </td>
+      </tr>)
+      }) : ""
+    }
   </tbody>
 </table>
 </Col>
 </Row>
  </CardBody>
-                    </Collapse>
-                  </Card>
+  </Collapse>
+  </Card>
                   <Card className="mb-0">
                     <CardHeader id="headingThree">
                       <Button block color="link" className="text-left m-0 p-0" onClick={() => this.toggleAccordion(2)} aria-expanded={this.state.accordion[2]} aria-controls="collapseThree">
