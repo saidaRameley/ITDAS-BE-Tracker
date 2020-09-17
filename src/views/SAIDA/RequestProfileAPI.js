@@ -16,7 +16,7 @@ class CreateBE extends Component {
         this.onChangeSysTM = this.onChangeSysTM.bind(this);
         this.onChangeRequestor = this.onChangeRequestor.bind(this);
         this.addRequestor = this.addRequestor.bind(this);
-        this.addGITAssessors = this.addGITAssessor.bind(this);
+        this.addGITAssessors = this.addGITAssessors.bind(this);
         this.onChangeGITAssessors = this.onChangeGITAssessors.bind(this);
         // Don't call this.setState() here!
         this.state = {
@@ -37,7 +37,7 @@ class CreateBE extends Component {
             dataRequest: {},
             dataSysTM : {},
             dataRequestor : {},
-            dataGITASSESSORS : {},
+            dataGITAssessors : {},
         };
 
     }
@@ -61,7 +61,8 @@ class CreateBE extends Component {
        this.LovConsultant();
        this.LovGIT();
        this.LovRequstor();
-       //this.getReqList();
+       this.getReqList();
+       this.getRequestorList();
        }
        
        generateRequstorID(){
@@ -414,21 +415,7 @@ addRequestor(){
         timer: 1000
       })
 
-      var accessToken = localStorage.getItem('token');
-      var reqID = localStorage.getItem('requestorID');
-      fetch("/api/ITD_REQUEST_LIST/?REQ_ID=" + reqID,
-      {
-        headers: {
-          Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
-        }
-       }
-      )
-      .then(response =>  response.json())
-      .then(result =>  {
-        //console.log('getReqList',result);
-        this.setState({ dataRequestor : result.req_requestor })
-       }
-       )   
+      this.getRequestorList();
 
     }
    
@@ -442,6 +429,25 @@ addRequestor(){
 
 }
 
+getRequestorList(){
+
+  var accessToken = localStorage.getItem('token');
+  var reqID = localStorage.getItem('requestorID');
+  fetch("/api/ITD_REQUEST_LIST/?REQ_ID=" + reqID,
+  {
+    headers: {
+      Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
+    }
+   }
+  )
+  .then(response =>  response.json())
+  .then(result =>  {
+    //console.log('getReqList',result);
+    this.setState({ dataRequestor : result.req_requestor })
+   }
+   )   
+
+}
 onChangeGITAssessors(e){
 
   e.preventDefault();
@@ -450,7 +456,7 @@ onChangeGITAssessors(e){
 
 }
 
-addGITAssessor(){
+addGITAssessors(){
   var reqID = localStorage.getItem('requestorID');
 
   if(this.state.RG_REQ_ID || this.state.RG_NAME || this.state.RG_SYSTEM || this.state.RG_EMAIL || this.state.RG_TAGCOST){
@@ -498,7 +504,7 @@ addGITAssessor(){
 
       var accessToken = localStorage.getItem('token');
       var reqID = localStorage.getItem('requestorID');
-      fetch("/api/ITD_REQ_GIT_CREATE=" + reqID,
+      fetch("/api/ITD_REQ_GIT_VIEW/?REQ_ID=" + reqID,
       {
         headers: {
           Authorization: 'Bearer ' + accessToken //the token is a variable which holds the token
@@ -508,7 +514,7 @@ addGITAssessor(){
       .then(response =>  response.json())
       .then(result =>  {
         //console.log('getReqList',result);
-        this.setState({ dataGITASSESSORS : result.req_requestor })
+        this.setState({ dataGITAssessors : result.user })
        }
        )   
 
@@ -618,7 +624,7 @@ onSubmitTM(){
         var reqSysTM = this.state.dataSysTM
         var requestor = this.state.LovRequestor
         var dataRequestor = this.state.dataRequestor
-        var dataGITASSESSORS = this.state.dataGITASSESSORS
+        var dataGITAssessors = this.state.dataGITAssessors
         return (
             <div>
 
@@ -829,7 +835,7 @@ onSubmitTM(){
   </thead>
   <tbody>
     {
-        Object.values(this.state.dataRequest).map((d,index)=>{
+        this.state.dataRequest ? Object.values(this.state.dataRequest).map((d,index)=>{
             return(<tr>
             <td>
               {index+1}
@@ -858,7 +864,7 @@ onSubmitTM(){
         </tr>
         )
 
-        })
+        }) : ""
     }
   </tbody>
 </table>
@@ -1096,9 +1102,10 @@ onSubmitTM(){
   </thead>
   <tbody>
   {
-      Object.values(dataGITASSESSORS).map((d)=>{
+     dataGITAssessors ? Object.values(dataGITAssessors).map((d,index)=>{
         return(<tr>
           <td>
+            {index+1}
               
           </td>
           <td>
@@ -1117,7 +1124,7 @@ onSubmitTM(){
 
           </td>
       </tr>)
-      })
+      }) : ""
     }
   </tbody>
 </table>
